@@ -1,26 +1,26 @@
-import React,{useEffext,useContext,useState, useEffect} from "react";
+import React, { useEffext, useContext, useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import {UserContext} from '../../App'
+import { UserContext } from "../../App";
 
 function Profile() {
-  const [myposts,setMyposts]=useState([])
-  const {state,dispatch} = useContext(UserContext)
-  useEffect(()=>{
-    fetch('/mypost',{
-      headers:{
+  const [myposts, setMyposts] = useState([]);
+  const { state, dispatch } = useContext(UserContext);
+  useEffect(() => {
+    fetch("/mypost", {
+      headers: {
         authorization: "Bearer " + localStorage.getItem("jwt"),
-      }
+      },
     })
-    .then((res)=>res.json())
-    .then((res)=>{
-      setMyposts(res)
-    })
-  },[])
+      .then((res) => res.json())
+      .then((res) => {
+        setMyposts(res);
+      });
+  }, []);
   const theme = useTheme();
   const smBreakPoint = useMediaQuery(theme.breakpoints.up("sm"));
   const xsBreakPoint = useMediaQuery(theme.breakpoints.up("xs"));
@@ -55,9 +55,8 @@ function Profile() {
                 width: "150px",
                 height: "150px",
                 borderRadius: "50%",
-                
               }}
-              alt='Img'
+              alt="Img"
               src="https://cdn.pixabay.com/photo/2016/11/18/15/03/man-1835195__480.jpg"
             />
           ) : (
@@ -70,7 +69,7 @@ function Profile() {
                 height: "70px",
                 borderRadius: "50%",
               }}
-              alt='Img'
+              alt="Img"
               src="https://cdn.pixabay.com/photo/2016/11/18/15/03/man-1835195__480.jpg"
             />
           )}
@@ -95,7 +94,7 @@ function Profile() {
               sx={{ fontSize: { xs: "10px", sm: "13px", color: "#F59C00" } }}
               gutterBottom
             >
-              40 posts
+              {myposts?.length ? myposts?.length : 0} posts
             </Typography>
             <Typography
               sx={{
@@ -125,35 +124,38 @@ function Profile() {
         <hr style={{ width: "90%" }}></hr>
       )}
       <Box color="white" display="flex" pl="5%" pr="5%">
-        <Grid  container columns={{ xs: 12, sm: 12, md: 12 }} spacing="0">
-        {myposts.map((item,index)=>{
-          return(
-          <Grid key={index} item xs={4} sm={4} md={4}>
-          {smBreakPoint?<img
-              style={{
-                width: "100%",
-                height: "22vw",
-                borderStyle: "solid",
-                borderWidth: "1px",
-                borderColor: "#58FFFB",
-              }}
-              alt='Img'
-              src={item.photo}
-            />:<img
-              style={{
-                width: "100%",
-                height: "28vw",
-                borderStyle: "solid",
-                borderWidth: "1px",
-                borderColor: "#58FFFB",
-              }}
-              alt='Img'
-              src={item.photo}
-            />}
-            
-          </Grid>
-          )
-        })}
+        <Grid container columns={{ xs: 12, sm: 12, md: 12 }} spacing="0">
+          {myposts.map((item, index) => {
+            return (
+              <Grid key={index} item xs={4} sm={4} md={4}>
+                {smBreakPoint ? (
+                  <img
+                    style={{
+                      width: "100%",
+                      height: "22vw",
+                      borderStyle: "solid",
+                      borderWidth: "1px",
+                      borderColor: "#58FFFB",
+                    }}
+                    alt="Img"
+                    src={item.photo}
+                  />
+                ) : (
+                  <img
+                    style={{
+                      width: "100%",
+                      height: "28vw",
+                      borderStyle: "solid",
+                      borderWidth: "1px",
+                      borderColor: "#58FFFB",
+                    }}
+                    alt="Img"
+                    src={item.photo}
+                  />
+                )}
+              </Grid>
+            );
+          })}
         </Grid>
       </Box>
     </Box>
