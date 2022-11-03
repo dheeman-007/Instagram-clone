@@ -12,6 +12,7 @@ const router=express.Router()
 router.get('/allpost',verify,(req,res)=>{
     Post.find()
     .populate("postedBy","_id name")
+    .populate("comments.postedBy","_id name")
     .then(posts=>{
         res.json({posts})
     })
@@ -57,6 +58,7 @@ router.put('/like',verify,(req,res)=>{
         new:true
     })
     .populate("postedBy","_id name")
+    .populate("comments.postedBy","_id name")
     .exec((err,result)=>{
         if(err) return res.status(422).json({error:err})
         else return res.status(200).json(result)
@@ -70,6 +72,7 @@ router.put('/unlike',verify,(req,res)=>{
         new:true
     })
     .populate("postedBy","_id name")
+    .populate("comments.postedBy","_id name")
     .exec((err,result)=>{
         if(err) return res.status(422).json({error:err})
         else return res.status(200).json(result)
@@ -87,6 +90,7 @@ router.put('/comment',verify,(req,res)=>{
         new:true
     })
     .populate("comments.postedBy","_id name")
+    .populate("postedBy","_id name")
     .exec((err,result)=>{
         if(err) return res.status(422).json({error:err})
         else return res.status(200).json(result)
@@ -94,6 +98,23 @@ router.put('/comment',verify,(req,res)=>{
 })
 
 
+router.delete('/deletepost/:postId',verify,(req,res)=>{
+    Post.findOne({_id:req.params.postId})
+    .exec((err,post)=>{
+        if(err || !post){
+            return res.status(422).json({error:"Unprocessable"})
+        }
+        if(post.postedBy._id.toString()===req.user._id.toString()){
+            post.remove()
+            .then((result)=>{
+                res.status(200).json(result)
+            })
+            .catch(err=>{
+                console.log(err)
+            })
+        }
+    })
+})
 
 
 export default router

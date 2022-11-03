@@ -7,20 +7,24 @@ import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
-import Stack from "@mui/material/Stack";
+import { Stack, Grid } from "@mui/material";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import Box from "@mui/material/Box";
 import Input from "@mui/material/Input";
 import SendIcon from "@mui/icons-material/Send";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../App";
+import { useNavigate } from "react-router-dom";
+
 const ariaLabel = { "aria-label": "description" };
 
 function Home() {
   const [data, setData] = useState([]);
-  const [text,setText] = useState("");
+  const { state, dispatch } = useContext(UserContext);
+  let navigate = useNavigate();
   useEffect(() => {
     fetch("/allpost", {
       headers: {
@@ -103,7 +107,21 @@ function Home() {
         console.log(err);
       });
   };
-
+  const deletePost = (id) => {
+    fetch(`/deletepost/${id}`, {
+      method: "delete",
+      headers: {
+        authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        const newData = data.filter((item) => {
+          return item._id !== res._id;
+        });
+        setData(newData);
+      });
+  };
   return (
     <Box
       width="100%"
@@ -119,33 +137,58 @@ function Home() {
           <Card
             key={index}
             sx={{
-              maxWidth: 365,
+              maxWidth: 300,
               width: { xs: "90%" },
               borderStyle: "solid",
               borderWidth: "3px",
               borderColor: "#700070",
               borderRadius: "10px",
-              bgcolor: "#F9F1F1",
-              paddingBottom: "20px",
-              marginTop: "20px",
+              bgcolor: "#E8D8D7",
+              paddingBottom: "10px",
+              marginTop: "10px",
             }}
           >
-            <CardHeader
-              avatar={
-                <Avatar
-                  sx={{
-                    bgcolor: red[500],
-                  }}
-                  aria-label="recipe"
+            <Stack display="flex" flexDirection="row">
+              <CardHeader
+                onClick={() =>
+                  item.postedBy._id === state._id
+                    ? navigate("/profile")
+                    : navigate(`/profile/${item.postedBy._id}`)
+                }
+                avatar={
+                  <Avatar
+                    sx={{
+                      bgcolor: red[500],
+                    }}
+                    aria-label="recipe"
+                  >
+                    {item.postedBy?.name?.toUpperCase().charAt(0) || "NA"}
+                  </Avatar>
+                }
+                sx={{
+                  flex: "2",
+                  cursor:'pointer'
+                }}
+                title={item.postedBy.name}
+              />
+              {item.postedBy._id === state._id && (
+                <Stack
+                  display="flex"
+                  flex="1"
+                  flexDirection="row"
+                  justifyContent="flex-end"
+                  width="100%"
                 >
-                  {item.postedBy.name.toUpperCase().charAt(0)}
-                </Avatar>
-              }
-              title={item.postedBy.name}
-            />
+                  <DeleteIcon
+                    onClick={() => deletePost(item._id)}
+                    sx={{ pt: "22px", pr: "14%", cursor: "pointer" }}
+                  />
+                </Stack>
+              )}
+            </Stack>
             <CardMedia
               component="img"
-              height="194"
+              height="154"
               image={item.photo}
               alt="Paella dish"
             />
@@ -166,7 +209,7 @@ function Home() {
                 <Box display="flex" flexDirection="row">
                   <FavoriteIcon
                     style={{
-                      color:'red',
+                      color: "red",
                       paddingTop: "8px",
                       paddingLeft: "8px",
                       fontSize: "18px",
@@ -205,26 +248,55 @@ function Home() {
               >
                 {item.title}
               </Typography>
+              <Box maxHeight="60px" pt={1} width="100%" overflow="auto">
+                {item?.comments?.map((comment, index) => (
+                  <Grid
+                    sx={{
+                      height: "20px",
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "flex-start",
+                    }}
+                    key={index}
+                  >
+                    <Typography
+                      fontWeight={50}
+                      style={{
+                        fontSize: "10px",
+                        paddingLeft: "10px",
+                        fontWeight: "100px",
+                      }}
+                      color="text.primary"
+                    >
+                      {comment.postedBy.name} :
+                    </Typography>
+                    <Typography
+                      style={{ fontSize: "10px", paddingLeft: "10px" }}
+                      color="text.secondary"
+                    >
+                      {comment.text}
+                    </Typography>
+                  </Grid>
+                ))}
+              </Box>
               <Box
-                style={{ paddingLeft: "11px", width: "94%" }}
+                style={{ paddingLeft: "4%", width: "92%" }}
                 display="flex"
                 flexDirection="row"
               >
-                <Input
-                  style={{ fontSize: "12px", width: "100%" }}
-                  placeholder="Comment"
-                  inputProps={ariaLabel}
-                  value={text}
-                  onChange={(e)=>setText(e.target.value)}
-                />
-                <SendIcon
-                  style={{
-                    paddingLeft: "12px",
-                    paddingTop: "5px",
-                    fontSize: "20px",
-                    cursor: "pointer",
+                <form
+                  style={{ width: "100%" }}
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    makeComment(e.target[0].value, item._id);
                   }}
-                />
+                >
+                  <Input
+                    style={{ fontSize: "12px", width: "100%" }}
+                    placeholder="Comment"
+                    inputProps={ariaLabel}
+                  />
+                </form>
               </Box>
             </CardActions>
           </Card>

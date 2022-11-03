@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import { MONGOURI } from "./keys.js";
 import auth from './routes/auth.js'
 import post from './routes/post.js'
+import user from './routes/user.js'
 
 const app = express();
 const PORT = 5000;
@@ -18,6 +19,7 @@ try {
 
 app.use(auth)
 app.use(post)
+app.use(user)
 
 app.listen(PORT, () => {
     console.log("server is runnning on port : ", PORT);
