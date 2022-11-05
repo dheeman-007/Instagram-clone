@@ -68,6 +68,16 @@ router.put('/unfollow',verify,(req,res)=>{
     })
 })
 
+router.put('/updateprofile',verify,(req,res)=>{
+    User.findByIdAndUpdate(req.user._id,{profilepic:req.body.pic},{
+        new:true
+    })
+    .select("-password")
+    .exec((err,result)=>{
+        if(err) return res.status(422).json({error:err})
+        return res.status(200).json(result)
+    })
+})
 
 
 

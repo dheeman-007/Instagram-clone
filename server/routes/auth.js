@@ -13,7 +13,7 @@ router.get('/',(req,res)=>{
 
 
 router.post('/signup', (req,res)=>{
-    const {name,email,password} =req.body
+    const {name,email,password,pic} =req.body
     if(!email || !password || !name){
         return res.status(422).json({error:"please add all fields"})
     }
@@ -25,7 +25,8 @@ router.post('/signup', (req,res)=>{
             const user = await User.create({
                 name:name,
                 email:email,
-                password:hash
+                password:hash,
+                profilepic:pic
             })
             res.status(200).json(user);
         }catch(err){
@@ -46,8 +47,8 @@ router.post('/login',(req,res)=>{
         .then(match=>{
             if(match){
                 const token=jwt.sign({id:obj._id},JWT_SECRET)
-                const {_id,name,email,followers,following} = obj
-                res.status(200).json({token,user:{_id,name,email,followers,following}})
+                const {_id,name,email,followers,following,profilepic} = obj
+                res.status(200).json({token,user:{_id,name,email,followers,following,profilepic}})
             }
             else return res.status(422).json({error:"Invalid email or password"})
         })

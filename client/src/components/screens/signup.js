@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect} from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -25,12 +25,19 @@ function Signup() {
   const [text, setText] = useState("");
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [image, setImage] = useState("");
+  const [url, setUrl] = useState(undefined);
   let navigate = useNavigate();
+  useEffect(() => {
+    if (url) {
+      postFields()
+    }
+  }, [url]);
   const handleClose = (event, reason) => {
-    if(success){
+    if (success) {
       setOpen(false);
       setSuccess(false);
-      navigate('/signin')
+      navigate("/signin");
     }
     if (reason === "clickaway") {
       setError(false);
@@ -39,9 +46,8 @@ function Signup() {
     setOpen(false);
     setError(false);
   };
-
-  const postData = () => {
-    if(!(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email))){
+  const postFields = () => {
+    if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
       setText("Invalid email");
       setOpen(true);
       setError(true);
@@ -56,6 +62,7 @@ function Signup() {
         name: name,
         password: password,
         email: email,
+        pic:url
       }),
     })
       .then((res) => res.json())
@@ -63,18 +70,42 @@ function Signup() {
         if (data.error) {
           setText(data.error);
           setOpen(true);
-          setError(true)
+          setError(true);
         } else {
           setText("User Created");
           setOpen(true);
-          setSuccess(true)
+          setSuccess(true);
         }
       })
-      .catch(err=>{
-        console.log(err)
-      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
+  const postData = () => {
+    if (image) {
+      uploadPic()
+    } else {
+      postFields()
+    }
+  };
+  const uploadPic = () => {
+    const formData = new FormData();
+    formData.append("file", image);
+    formData.append("upload_preset", "insta-clone");
+    formData.append("cloud_name", "dfhrkctjk");
 
+    fetch("https://api.cloudinary.com/v1_1/dfhrkctjk/image/upload", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        setUrl(result.url);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <Box
       mt={8}
@@ -179,6 +210,25 @@ function Signup() {
               onChange={(e) => setPassword(e.target.value)}
               inputProps={ariaLabel}
             />
+          </Stack>
+          <Stack
+            mt={3}
+            width="100%"
+            display="flex"
+            flexDirection="row"
+            justifyContent="flex-start"
+          >
+            <Typography sx={{ fontSize: "14px", color: "grey" }}>
+              Profile Picture:
+            </Typography>
+            <input
+              style={{ paddingLeft: "10px" }}
+              type="file"
+              id="avatar"
+              name="profile"
+              accept="image/png, image/jpeg"
+              onChange={(e) => setImage(e.target.files[0])}
+            ></input>
           </Stack>
           <Button
             onClick={() => postData()}

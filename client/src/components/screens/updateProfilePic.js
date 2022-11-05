@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -7,7 +7,9 @@ import Stack from "@mui/material/Stack";
 import Input from "@mui/material/Input";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../App";
 
 const ariaLabel = { "aria-label": "description" };
 
@@ -15,9 +17,8 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export const CreatePost = () => {
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+export const UpdateProfilePic = () => {
+  const {state,dispatch} = useContext(UserContext)
   const [image, setImage] = useState("");
   const [url, setUrl] = useState("");
   const [open, setOpen] = useState(false);
@@ -28,15 +29,13 @@ export const CreatePost = () => {
 
   useEffect(() => {
     if (url) {
-      fetch("/createpost", {
-        method: "post",
+      fetch("/updateprofile", {
+        method: "put",
         headers: {
           "Content-Type": "application/json",
           authorization: "Bearer " + localStorage.getItem("jwt"),
         },
         body: JSON.stringify({
-          title: title,
-          body: body,
           pic: url,
         }),
       })
@@ -47,7 +46,9 @@ export const CreatePost = () => {
             setOpen(true);
             setError(true);
           } else {
-            setText("Uploaded");
+            localStorage.setItem("user", JSON.stringify({...state,profilepic:data.profilepic}));
+            dispatch({type:"UPDATEPIC",payload:data.profilepic})
+            setText("Profile picture updated");
             setOpen(true);
             setSuccess(true);
           }
@@ -132,47 +133,12 @@ export const CreatePost = () => {
             flexDirection: "column",
           }}
         >
-          <Box
-            component="form"
-            noValidate
-            sx={{
-              display: "grid",
-              gridTemplateColumns: { sm: "1fr 1fr" },
-              gap: 2,
-            }}
-          ></Box>
-          <Stack
-            mt={1}
-            width="100%"
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Input
-              sx={{ width: "100%" }}
-              placeholder="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              inputProps={ariaLabel}
-            />
-          </Stack>
-          <Stack
-            mt={2}
-            width="100%"
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Input
-              sx={{ width: "100%" }}
-              placeholder="body"
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
-              inputProps={ariaLabel}
-            />
-          </Stack>
-          <Stack mt={3} width="100%" display="flex" justifyContent="flex-start">
+          <Stack mt={3} width="100%" display="flex" flexDirection='row' justifyContent="flex-start">
+            <Typography sx={{fontSize:'14px'}}>
+                Choose profile:
+            </Typography>
             <input
+            style={{paddingLeft:'5px'}}
               type="file"
               id="avatar"
               name="avatar"
@@ -186,9 +152,8 @@ export const CreatePost = () => {
             size="medium"
             onClick={() => postDetails()}
           >
-            Submit Post
+            Save 
           </Button>
-          <Stack></Stack>
         </CardContent>
       </Card>
     </Box>

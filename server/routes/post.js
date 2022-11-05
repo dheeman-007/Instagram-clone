@@ -21,6 +21,18 @@ router.get('/allpost',verify,(req,res)=>{
     })
 })
 
+router.get('/followingpost',verify,(req,res)=>{
+    Post.find({postedBy:{ $in:req.user.following}})
+    .populate("postedBy","_id name")
+    .populate("comments.postedBy","_id name")
+    .then(posts=>{
+        res.json({posts})
+    })
+    .catch(err=>{
+        console.log(err)
+    })
+})
+
 router.post('/createpost',verify,async(req,res)=>{
     const {title,body,pic} =req.body
     if(!title || !body || !pic){

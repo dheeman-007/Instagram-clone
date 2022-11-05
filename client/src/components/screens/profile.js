@@ -6,10 +6,13 @@ import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { UserContext } from "../../App";
+import EditIcon from "@mui/icons-material/Edit";
+import { useNavigate } from "react-router-dom";
 
 function Profile() {
   const [myposts, setMyposts] = useState([]);
   const { state, dispatch } = useContext(UserContext);
+  const navigate = useNavigate();
   useEffect(() => {
     fetch("/mypost", {
       headers: {
@@ -23,7 +26,6 @@ function Profile() {
   }, []);
   const theme = useTheme();
   const smBreakPoint = useMediaQuery(theme.breakpoints.up("sm"));
-  const xsBreakPoint = useMediaQuery(theme.breakpoints.up("xs"));
   return (
     <Box
       minHeight="100%"
@@ -57,7 +59,7 @@ function Profile() {
                 borderRadius: "50%",
               }}
               alt="Img"
-              src="https://cdn.pixabay.com/photo/2016/11/18/15/03/man-1835195__480.jpg"
+              src={state?.profilepic}
             />
           ) : (
             <img
@@ -70,9 +72,17 @@ function Profile() {
                 borderRadius: "50%",
               }}
               alt="Img"
-              src="https://cdn.pixabay.com/photo/2016/11/18/15/03/man-1835195__480.jpg"
+              src={state?.profilepic}
             />
           )}
+          <EditIcon
+            onClick={() => navigate("/updateprofile")}
+            sx={{
+              pt: { xs: "40px", sm: "60px" },
+              fontSize: { xs: "15px", sm: "25px" },
+              cursor: "pointer",
+            }}
+          />
         </Box>
         <Box
           pl="10px"
@@ -169,6 +179,9 @@ function Profile() {
           })}
         </Grid>
       </Box>
+      <br></br>
+      <br></br>
+      <br></br>
     </Box>
   );
 }

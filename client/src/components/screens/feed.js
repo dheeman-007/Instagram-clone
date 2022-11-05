@@ -21,12 +21,12 @@ import { useNavigate } from "react-router-dom";
 
 const ariaLabel = { "aria-label": "description" };
 
-function Home() {
+function Feed() {
   const [data, setData] = useState([]);
   const { state, dispatch } = useContext(UserContext);
   let navigate = useNavigate();
   useEffect(() => {
-    fetch("/allpost", {
+    fetch("/followingpost", {
       headers: {
         authorization: "Bearer " + localStorage.getItem("jwt"),
       },
@@ -308,4 +308,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Feed;
