@@ -7,9 +7,11 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { UserContext } from "../../App";
 import { useParams } from "react-router-dom";
+import Button from "@mui/material/Button";
 
 function UserProfile() {
-  const [userposts, setUserposts] = useState(null);
+  const [userprofile, setUserprofile] = useState(null);
+  const [follow, setFollow] = useState(true);
   const { state, dispatch } = useContext(UserContext);
   const { id } = useParams();
   useEffect(() => {
@@ -20,9 +22,73 @@ function UserProfile() {
     })
       .then((res) => res.json())
       .then((res) => {
-        setUserposts(res);
+        setUserprofile(res);
+        const user = JSON.parse(localStorage.getItem("user"));
+        res?.user?.followers?.map((item) => {
+          if (item.toString() === user?._id.toString()) setFollow(false);
+        });
       });
   }, []);
+  const followuser = () => {
+    fetch("/follow", {
+      method: "put",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+      body: JSON.stringify({
+        followingId: id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        dispatch({
+          type: "UPDATE",
+          payload: {
+            following: res.follower.following,
+            followers: res.follower.followers,
+          },
+        });
+        localStorage.setItem("user", JSON.stringify(res.follower));
+        setUserprofile((prevState) => {
+          return {
+            ...prevState,
+            user: res.followed,
+          };
+        });
+        setFollow(false);
+      });
+  };
+  const unfollowuser = () => {
+    fetch("/unfollow", {
+      method: "put",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+      body: JSON.stringify({
+        unfollowingId: id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        dispatch({
+          type: "UPDATE",
+          payload: {
+            following: res.follower.following,
+            followers: res.follower.followers,
+          },
+        });
+        localStorage.setItem("user", JSON.stringify(res.follower));
+        setUserprofile((prevState) => {
+          return {
+            ...prevState,
+            user: res.followed,
+          };
+        });
+        setFollow(true);
+      });
+  };
   const theme = useTheme();
   const smBreakPoint = useMediaQuery(theme.breakpoints.up("sm"));
   return (
@@ -87,13 +153,16 @@ function UserProfile() {
               sx={{ fontSize: { xs: "15px", sm: "27px", color: "#E4F006" } }}
               gutterBottom
             >
-              {userposts?.user?.name}
+              {userprofile?.user?.name}
             </Typography>
             <Typography
-              sx={{ fontSize: { xs: "11px", sm: "15px", color: "#E1E385" }, pb:'3%' }}
+              sx={{
+                fontSize: { xs: "11px", sm: "15px", color: "#E1E385" },
+                pb: "3%",
+              }}
               gutterBottom
             >
-              {userposts?.user?.email}
+              {userprofile?.user?.email}
             </Typography>
           </Stack>
           <Stack flexDirection="row" color="#E6DEDC">
@@ -101,7 +170,7 @@ function UserProfile() {
               sx={{ fontSize: { xs: "10px", sm: "13px", color: "#F59C00" } }}
               gutterBottom
             >
-              {userposts?.post.length ? userposts?.post.length : 0} posts
+              {userprofile?.post.length ? userprofile?.post.length : 0} posts
             </Typography>
             <Typography
               sx={{
@@ -110,7 +179,10 @@ function UserProfile() {
               }}
               gutterBottom
             >
-              40 followers
+              {userprofile?.user?.followers?.length
+                ? userprofile?.user?.followers?.length
+                : 0}{" "}
+              followers
             </Typography>
             <Typography
               sx={{
@@ -119,20 +191,49 @@ function UserProfile() {
               }}
               gutterBottom
             >
-              40 following
+              {userprofile?.user?.following?.length
+                ? userprofile?.user?.following?.length
+                : 0}{" "}
+              following
             </Typography>
           </Stack>
+
+          {follow ? (
+            <Stack width="50px" mt={0.5}>
+              <Button
+                onClick={() => followuser()}
+                sx={{ height: { xs: "18px", sm: "21px" } }}
+                variant="outlined"
+              >
+                <Typography
+                  sx={{ fontSize: { xs: "9px", sm: "10px", color: "#3EE0E1" } }}
+                >
+                  follow
+                </Typography>
+              </Button>
+            </Stack>
+          ) : (
+            <Stack width="70px" mt={0.5}>
+              <Button
+                onClick={() => unfollowuser()}
+                sx={{ height: { xs: "18px", sm: "21px" } }}
+                variant="outlined"
+              >
+                <Typography
+                  sx={{ fontSize: { xs: "9px", sm: "10px", color: "#3EE0E1" } }}
+                >
+                  unfollow
+                </Typography>
+              </Button>
+            </Stack>
+          )}
         </Box>
       </Box>
       <br></br>
-      {smBreakPoint ? (
-        <hr style={{ width: "90%" }}></hr>
-      ) : (
-        <hr style={{ width: "90%" }}></hr>
-      )}
+      <hr style={{ width: "90%" }}></hr>
       <Box color="white" display="flex" pl="5%" pr="5%">
         <Grid container columns={{ xs: 12, sm: 12, md: 12 }} spacing="0">
-          {userposts?.post?.map((item, index) => {
+          {userprofile?.post?.map((item, index) => {
             return (
               <Grid key={index} item xs={4} sm={4} md={4}>
                 {smBreakPoint ? (

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+const { ObjectId } = mongoose.Schema.Types
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
@@ -14,7 +15,19 @@ const userSchema = new Schema({
     password:{
         type:String,
         required:true
-    }
+    },
+    followers:[
+        {
+            type:ObjectId,
+            ref:"User"
+        }
+    ],
+    following:[
+        {
+            type:ObjectId,
+            ref:"User"
+        }
+    ]
 });
 
 export default mongoose.model("User",userSchema)

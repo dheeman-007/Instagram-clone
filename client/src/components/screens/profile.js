@@ -103,7 +103,8 @@ function Profile() {
               }}
               gutterBottom
             >
-              40 followers
+              {state?.followers?.length ? state?.followers?.length : 0}{" "}
+              followers
             </Typography>
             <Typography
               sx={{
@@ -112,7 +113,8 @@ function Profile() {
               }}
               gutterBottom
             >
-              40 following
+              {state?.following?.length ? state?.following?.length : 0}{" "}
+              following
             </Typography>
           </Stack>
         </Box>

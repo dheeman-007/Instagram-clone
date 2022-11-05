@@ -26,6 +26,51 @@ router.get('/user/:id',verify,(req,res)=>{
 })
 
 
+router.put('/follow',verify,(req,res)=>{
+    User.findByIdAndUpdate(req.body.followingId,{
+        $push:{followers:req.user._id}
+    },{
+        new:true
+    })
+    .exec((err,followed)=>{
+        if(err) return res.status(422).json({error:err})
+        User.findByIdAndUpdate(req.user._id,{
+            $push:{following:req.body.followingId}
+        },{
+            new:true
+        })
+        .select("-password")
+        .exec((err,follower)=>{
+            if(err) return res.status(422).json({error:err})
+            return res.status(200).json({followed,follower})
+        })
+    })
+})
+
+router.put('/unfollow',verify,(req,res)=>{
+    User.findByIdAndUpdate(req.body.unfollowingId,{
+        $pull:{followers:req.user._id}
+    },{
+        new:true
+    })
+    .exec((err,followed)=>{
+        if(err) return res.status(422).json({error:err})
+        User.findByIdAndUpdate(req.user._id,{
+            $pull:{following:req.body.unfollowingId}
+        },{
+            new:true
+        })
+        .select("-password")
+        .exec((err,follower)=>{
+            if(err) return res.status(422).json({error:err})
+            return res.status(200).json({followed,follower})
+        })
+    })
+})
+
+
+
+
 
 
 
