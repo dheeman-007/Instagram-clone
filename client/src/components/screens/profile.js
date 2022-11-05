@@ -88,6 +88,15 @@ function Profile() {
             >
               {state?.name}
             </Typography>
+            <Typography
+              sx={{
+                fontSize: { xs: "11px", sm: "15px", color: "#E1E385" },
+                pb: "3%",
+              }}
+              gutterBottom
+            >
+              {state?.email}
+            </Typography>
           </Stack>
           <Stack flexDirection="row" color="#E6DEDC">
             <Typography
