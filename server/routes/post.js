@@ -1,8 +1,5 @@
 import express from 'express'
 import Post from '../models/post.js'
-import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
-import {JWT_SECRET} from '../keys.js'
 import { verify } from '../middleware/requireLogin.js'
 
 const router=express.Router()
@@ -13,6 +10,7 @@ router.get('/allpost',verify,(req,res)=>{
     Post.find()
     .populate("postedBy","_id name")
     .populate("comments.postedBy","_id name")
+    .sort("-createdAt")
     .then(posts=>{
         res.json({posts})
     })
@@ -25,6 +23,7 @@ router.get('/followingpost',verify,(req,res)=>{
     Post.find({postedBy:{ $in:req.user.following}})
     .populate("postedBy","_id name")
     .populate("comments.postedBy","_id name")
+    .sort("-createdAt")
     .then(posts=>{
         res.json({posts})
     })
@@ -35,14 +34,13 @@ router.get('/followingpost',verify,(req,res)=>{
 
 router.post('/createpost',verify,async(req,res)=>{
     const {title,body,pic} =req.body
-    if(!title || !body || !pic){
+    if(!title || !pic){
         return res.status(422).json({error:"Please add all fields"})
     }
     req.user.password=undefined
     try{
         const post = await Post.create({
             title,
-            body,
             photo:pic,
             postedBy:req.user
         })

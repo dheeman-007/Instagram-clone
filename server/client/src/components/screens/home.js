@@ -13,7 +13,6 @@ import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import Box from "@mui/material/Box";
 import Input from "@mui/material/Input";
-import SendIcon from "@mui/icons-material/Send";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../App";

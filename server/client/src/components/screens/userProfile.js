@@ -28,7 +28,7 @@ function UserProfile() {
           if (item.toString() === user?._id.toString()) setFollow(false);
         });
       });
-  }, []);
+  }, [id]);
   const followuser = () => {
     fetch("/follow", {
       method: "put",

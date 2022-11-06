@@ -8,10 +8,6 @@ const postSchema = new Schema({
         type:String,
         required:true
     },
-    body:{
-        type:String,
-        required:true
-    },
     photo:{
         type:String,
         required:true
@@ -33,6 +29,6 @@ const postSchema = new Schema({
             ref:"User"
         }
     }]
-});
+},{timestamps:true});
 
 export default mongoose.model("Post",postSchema)

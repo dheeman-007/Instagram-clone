@@ -1,9 +1,6 @@
 import express from 'express'
 import Post from '../models/post.js'
 import User from '../models/user.js'
-import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
-import {JWT_SECRET} from '../keys.js'
 import { verify } from '../middleware/requireLogin.js'
 
 const router=express.Router()
@@ -80,7 +77,15 @@ router.put('/updateprofile',verify,(req,res)=>{
 })
 
 
-
+router.post('/search',(req,res)=>{
+    let userPattern=new RegExp("^"+req.body.query)
+    User.find({email:{$regex:userPattern}})
+    .select("_id email name profilepic")
+    .exec((err,result)=>{
+        if(err) return res.status(422).json({error:err})
+        return res.status(200).json(result)
+    })
+})
 
 
 

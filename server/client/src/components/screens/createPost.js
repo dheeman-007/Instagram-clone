@@ -17,7 +17,6 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 export const CreatePost = () => {
   const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
   const [image, setImage] = useState("");
   const [url, setUrl] = useState("");
   const [open, setOpen] = useState(false);
@@ -36,7 +35,6 @@ export const CreatePost = () => {
         },
         body: JSON.stringify({
           title: title,
-          body: body,
           pic: url,
         }),
       })
@@ -153,21 +151,6 @@ export const CreatePost = () => {
               placeholder="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              inputProps={ariaLabel}
-            />
-          </Stack>
-          <Stack
-            mt={2}
-            width="100%"
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Input
-              sx={{ width: "100%" }}
-              placeholder="body"
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
               inputProps={ariaLabel}
             />
           </Stack>

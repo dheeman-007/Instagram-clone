@@ -1,6 +1,6 @@
 import User from '../models/user.js'
 import jwt from 'jsonwebtoken'
-import {JWT_SECRET} from '../keys.js'
+import {JWT_SECRET} from '../config/keys.js'
 
 export const verify = (req,res,next) =>{
     const {authorization} = req.headers

@@ -2,15 +2,9 @@ import express from 'express'
 import User from '../models/user.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import {JWT_SECRET} from '../keys.js'
-import { verify } from '../middleware/requireLogin.js'
+import {JWT_SECRET} from '../config/keys.js'
 
 const router=express.Router()
-
-router.get('/',(req,res)=>{
-    res.send('hello')
-})
-
 
 router.post('/signup', (req,res)=>{
     const {name,email,password,pic} =req.body
