@@ -1,9 +1,5 @@
-import * as React from "react";
-import { useContext, useEffect } from "react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Stack from "@mui/material/Stack";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import React, { useContext, useEffect } from "react";
+import { Box, Typography, Stack, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../App";
@@ -23,13 +19,13 @@ export default function Navbar() {
     if (state) {
       setProfile(true);
       setCreatepost(true);
-      setLogout(true)
+      setLogout(true);
       setSignin(false);
       setSignup(false);
     } else {
       setProfile(false);
       setCreatepost(false);
-      setLogout(false)
+      setLogout(false);
       setSignin(true);
       setSignup(true);
     }
@@ -174,12 +170,12 @@ export default function Navbar() {
           ) : null}
           {logout ? (
             <Box
-              pl='1%'
+              pl="1%"
               sx={{ width: { xs: "40px", sm: "80px" } }}
               onClick={() => {
-                localStorage.clear()
-                dispatch({type:"CLEAR"})
-                navigate('/signin')
+                localStorage.clear();
+                dispatch({ type: "CLEAR" });
+                navigate("/signin");
               }}
             >
               {smBreakPoint ? (

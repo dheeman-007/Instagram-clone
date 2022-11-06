@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import Input from "@mui/material/Input";
-import Snackbar from "@mui/material/Snackbar";
+import {
+  Box,
+  Card,
+  CardContent,
+  Button,
+  Stack,
+  Input,
+  Snackbar,
+} from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
 

@@ -1,29 +1,25 @@
-import * as React from "react";
-import { useContext } from "react";
-import { styled } from "@mui/material/styles";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
+import React, { useContext } from "react";
+import {
+  AppBar,
+  Box,
+  Typography,
+  Stack,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  InputBase,
+  Divider,
+  List,
+  ListItem,
+} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
-import MoreIcon from "@mui/icons-material/MoreVert";
 import RssFeedIcon from "@mui/icons-material/RssFeed";
 import PublicIcon from "@mui/icons-material/Public";
 import PersonIcon from "@mui/icons-material/Person";
-import { Stack } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../App";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import InputBase from "@mui/material/InputBase";
-import Divider from "@mui/material/Divider";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
 
 export default function Bottomnavbar() {
   const { state, dispatch } = useContext(UserContext);
@@ -35,8 +31,8 @@ export default function Bottomnavbar() {
   };
 
   const handleClose = () => {
-    setSearch("")
-    setUsers([])
+    setSearch("");
+    setUsers([]);
     setOpen(false);
   };
 
@@ -54,7 +50,6 @@ export default function Bottomnavbar() {
       .then((res) => res.json())
       .then((res) => {
         setUsers(res);
-        console.log(users);
       })
       .catch((err) => {
         console.log(err);

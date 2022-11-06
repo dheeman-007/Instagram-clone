@@ -1,9 +1,5 @@
-import React, { useEffext, useContext, useState, useEffect } from "react";
-import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import React, { useContext, useState, useEffect } from "react";
+import { Box, Stack, Grid, Typography, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { UserContext } from "../../App";
 import { useParams } from "react-router-dom";

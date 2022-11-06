@@ -1,16 +1,17 @@
-import React from "react";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import Input from "@mui/material/Input";
-import { useState,useContext } from "react";
-import Snackbar from "@mui/material/Snackbar";
+import React, { useState, useContext } from "react";
+import {
+  Box,
+  Card,
+  CardContent,
+  Button,
+  Stack,
+  Typography,
+  Input,
+  Snackbar,
+} from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
-import {UserContext} from '../../App'
+import { UserContext } from "../../App";
 
 const ariaLabel = { "aria-label": "description" };
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -18,7 +19,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 function Signin() {
-  const {state,dispatch} = useContext(UserContext)
+  const { state, dispatch } = useContext(UserContext);
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [open, setOpen] = useState(false);
@@ -68,9 +69,9 @@ function Signin() {
           setOpen(true);
           setError(true);
         } else {
-          localStorage.setItem("jwt",data.token)
-          localStorage.setItem("user",JSON.stringify(data.user))
-          dispatch({type:"USER",payload:data.user})
+          localStorage.setItem("jwt", data.token);
+          localStorage.setItem("user", JSON.stringify(data.user));
+          dispatch({ type: "USER", payload: data.user });
           setText("Redirecting");
           setOpen(true);
           setSuccess(true);

@@ -1,19 +1,20 @@
-import * as React from "react";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardActions from "@mui/material/CardActions";
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
+import {
+  Card,
+  CardHeader,
+  CardMedia,
+  CardActions,
+  Avatar,
+  IconButton,
+  Typography,
+  Stack,
+  Grid,
+  Box,
+  Input,
+} from "@mui/material";
 import { red } from "@mui/material/colors";
-import { Stack, Grid } from "@mui/material";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import Box from "@mui/material/Box";
-import Input from "@mui/material/Input";
-import SendIcon from "@mui/icons-material/Send";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../App";
@@ -167,7 +168,7 @@ function Feed() {
                 }
                 sx={{
                   flex: "2",
-                  cursor:'pointer'
+                  cursor: "pointer",
                 }}
                 title={item.postedBy.name}
               />

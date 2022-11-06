@@ -1,24 +1,23 @@
 import React, { useState, useEffect, useContext } from "react";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import Input from "@mui/material/Input";
-import Snackbar from "@mui/material/Snackbar";
+import {
+  Box,
+  Card,
+  CardContent,
+  Button,
+  Stack,
+  Snackbar,
+  Typography,
+} from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
-import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../App";
-
-const ariaLabel = { "aria-label": "description" };
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 export const UpdateProfilePic = () => {
-  const {state,dispatch} = useContext(UserContext)
+  const { state, dispatch } = useContext(UserContext);
   const [image, setImage] = useState("");
   const [url, setUrl] = useState("");
   const [open, setOpen] = useState(false);
@@ -46,8 +45,11 @@ export const UpdateProfilePic = () => {
             setOpen(true);
             setError(true);
           } else {
-            localStorage.setItem("user", JSON.stringify({...state,profilepic:data.profilepic}));
-            dispatch({type:"UPDATEPIC",payload:data.profilepic})
+            localStorage.setItem(
+              "user",
+              JSON.stringify({ ...state, profilepic: data.profilepic })
+            );
+            dispatch({ type: "UPDATEPIC", payload: data.profilepic });
             setText("Profile picture updated");
             setOpen(true);
             setSuccess(true);
@@ -133,12 +135,16 @@ export const UpdateProfilePic = () => {
             flexDirection: "column",
           }}
         >
-          <Stack mt={3} width="100%" display="flex" flexDirection='row' justifyContent="flex-start">
-            <Typography sx={{fontSize:'14px'}}>
-                Choose profile:
-            </Typography>
+          <Stack
+            mt={3}
+            width="100%"
+            display="flex"
+            flexDirection="row"
+            justifyContent="flex-start"
+          >
+            <Typography sx={{ fontSize: "14px" }}>Choose profile:</Typography>
             <input
-            style={{paddingLeft:'5px'}}
+              style={{ paddingLeft: "5px" }}
               type="file"
               id="avatar"
               name="avatar"
@@ -152,7 +158,7 @@ export const UpdateProfilePic = () => {
             size="medium"
             onClick={() => postDetails()}
           >
-            Save 
+            Save
           </Button>
         </CardContent>
       </Card>

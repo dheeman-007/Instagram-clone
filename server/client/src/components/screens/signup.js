@@ -1,13 +1,14 @@
-import React,{useEffect} from "react";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import Input from "@mui/material/Input";
-import { useState } from "react";
-import Snackbar from "@mui/material/Snackbar";
+import React, { useEffect, useState } from "react";
+import {
+  Box,
+  Card,
+  CardContent,
+  Button,
+  Stack,
+  Typography,
+  Input,
+  Snackbar,
+} from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
 
@@ -30,7 +31,7 @@ function Signup() {
   let navigate = useNavigate();
   useEffect(() => {
     if (url) {
-      postFields()
+      postFields();
     }
   }, [url]);
   const handleClose = (event, reason) => {
@@ -47,7 +48,11 @@ function Signup() {
     setError(false);
   };
   const postFields = () => {
-    if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
+    if (
+      !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+        email
+      )
+    ) {
       setText("Invalid email");
       setOpen(true);
       setError(true);
@@ -62,7 +67,7 @@ function Signup() {
         name: name,
         password: password,
         email: email,
-        pic:url
+        pic: url,
       }),
     })
       .then((res) => res.json())
@@ -83,9 +88,9 @@ function Signup() {
   };
   const postData = () => {
     if (image) {
-      uploadPic()
+      uploadPic();
     } else {
-      postFields()
+      postFields();
     }
   };
   const uploadPic = () => {
