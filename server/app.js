@@ -6,7 +6,7 @@ import post from './routes/post.js'
 import user from './routes/user.js'
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.use(express.json())
 
